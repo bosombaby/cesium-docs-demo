@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  <title>flyHome</title>
+  <link rel='stylesheet' href='../assets/libs/cesium/Widgets/widgets.css'>
+  <style>
+    html,
+    body,
+    #cesiumContainer {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    .tips {
+      width: 180px;
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      font-size: 14px;
+      z-index: 999;
+      color: #ebebeb;
+      background-color: #1f1f1f;
+      border-radius: 2px;
+      padding: 4px;
+      user-select: none;
+    }
+
+    .lil-gui {
+      --width: 180px;
+      --name-width: 85%;
+    }
+
+    .lil-gui.autoPlace {
+      top: 85px;
+      left: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="cesiumContainer">
+    <div class="tips">
+      提示：转动离开初始相机视角后，调整duration，再点击flyHome
+    </div>
+  </div>
+  <script src="../assets/libs/cesium/Cesium.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/lil-gui@0.17"></script>
+  <script>
+    Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI0NmY4OGRkZS03ZTljLTQ5MDMtYmUwZC0wNmM2ZjdmM2M1MzMiLCJpZCI6MTI2MjUzLCJpYXQiOjE2NzczMTI2ODJ9.KO5KCez-xGcJBJfY8XYWAlUXHO4WWrZUm6tCZ1MfCWM'
+    const viewer = new Cesium.Viewer("cesiumContainer", {
+      imageryProvider: new Cesium.ArcGisMapServerImageryProvider({
+        url: 'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer'
+      }),
+      animation: false,
+      timeline: false
+    })
+    // 隐藏版权信息
+    viewer._cesiumWidget._creditContainer.style.display = "none"
+  </script>
+  <script>
+    // lil-gui
+    const gui = new lil.GUI();
+    const controls = {
+      duration: 3,
+      flyHome: function () {
+        viewer.camera.flyHome(this.duration)
+      }
+    }
+
+    gui.add(controls, 'duration')
+    gui.add(controls, 'flyHome')
+  </script>
+</body>
+
+</html>

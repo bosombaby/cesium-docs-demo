@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  <title>move</title>
+  <link rel="stylesheet"
+    href="https://lf26-cdn-tos.bytecdntp.com/cdn/expire-1-M/element-ui/2.15.7/theme-chalk/index.min.css">
+  <link rel='stylesheet' href='../assets/libs/cesium/Widgets/widgets.css'>
+  <style>
+    html,
+    body,
+    #cesiumContainer {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    #app {
+      padding: 20px;
+      width: 200px;
+      position: absolute;
+      left: 10px;
+      top: 10px;
+      z-index: 999;
+      color: #fff;
+      background-color: rgba(40, 44, 50, 0.9);
+      border-radius: 10px;
+    }
+
+    .group {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .el-input {
+      width: 80px
+    }
+  </style>
+</head>
+
+<body>
+  <div id="cesiumContainer">
+    <div id="app">
+      <div>提示：输入amount参数后点击按钮完成视角的移动</div><br>
+      <div class="group">
+        <el-button type="primary" @click="moveForward()" size="mini">moveForward</el-button>
+        <el-input v-model="moveForwardAmount" size="mini"></el-input>
+      </div>
+      <div class="group">
+        <el-button type="primary" @click="moveBackward()" size="mini">moveBackward</el-button>
+        <el-input v-model="moveBackwardAmount" size="mini"></el-input>
+      </div>
+      <div class="group">
+        <el-button type="primary" @click="moveLeft()" size="mini">moveLeft</el-button>
+        <el-input v-model="moveLeftAmount" size="mini"></el-input>
+      </div>
+      <div class="group">
+        <el-button type="primary" @click="moveRight()" size="mini">moveRight</el-button>
+        <el-input v-model="moveRightAmount" size="mini"></el-input>
+      </div>
+      <div class="group">
+        <el-button type="primary" @click="moveUp()" size="mini">moveUp</el-button>
+        <el-input v-model="moveUpAmount" size="mini"></el-input>
+      </div>
+      <div class="group">
+        <el-button type="primary" @click="moveDown()" size="mini">moveDown</el-button>
+        <el-input v-model="moveDownAmount" size="mini"></el-input>
+      </div>
+    </div>
+  </div>
+  <script src="https://lib.baomitu.com/vue/2.6.14/vue.min.js"></script>
+  <script src="https://lib.baomitu.com/element-ui/2.15.7/index.min.js"></script>
+  <script src="../assets/libs/cesium/Cesium.js"></script>
+  <script>
+    Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI0NmY4OGRkZS03ZTljLTQ5MDMtYmUwZC0wNmM2ZjdmM2M1MzMiLCJpZCI6MTI2MjUzLCJpYXQiOjE2NzczMTI2ODJ9.KO5KCez-xGcJBJfY8XYWAlUXHO4WWrZUm6tCZ1MfCWM'
+    const viewer = new Cesium.Viewer("cesiumContainer", {
+      imageryProvider: new Cesium.ArcGisMapServerImageryProvider({
+        url: 'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer'
+      })
+    })
+    viewer._cesiumWidget._creditContainer.style.display = "none"
+  </script>
+  <script>
+    new Vue({
+      el: '#app',
+      data () {
+        return {
+          moveForwardAmount: 100000.0,
+          moveBackwardAmount: 100000.0,
+          moveLeftAmount: 100000.0,
+          moveRightAmount: 100000.0,
+          moveUpAmount: 100000.0,
+          moveDownAmount: 100000.0,
+        }
+      },
+      methods: {
+        moveForward () {
+          viewer.camera.moveForward(this.moveForwardAmount)
+        },
+        moveBackward () {
+          viewer.camera.moveBackward(this.moveBackwardAmount)
+        },
+        moveLeft () {
+          viewer.camera.moveLeft(this.moveLeftAmount)
+        },
+        moveRight () {
+          viewer.camera.moveRight(this.moveRightAmount)
+        },
+        moveUp () {
+          viewer.camera.moveUp(this.moveUpAmount)
+        },
+        moveDown () {
+          viewer.camera.moveDown(this.moveDownAmount)
+        },
+      },
+    })
+  </script>
+</body>
+
+</html>

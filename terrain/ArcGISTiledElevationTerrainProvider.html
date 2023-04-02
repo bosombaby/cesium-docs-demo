@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>ArcGISTiledElevationTerrainProvider</title>
+  <link rel='stylesheet' href='../assets/libs/cesium/Widgets/widgets.css'>
+  <style>
+    html,
+    body,
+    #cesiumContainer {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+  </style>
+
+</head>
+
+<body>
+  <div id="cesiumContainer"></div>
+  <script src='https://cesium.com/downloads/cesiumjs/releases/1.97/Build/Cesium/Cesium.js'></script>
+  <script>
+    Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI0NmY4OGRkZS03ZTljLTQ5MDMtYmUwZC0wNmM2ZjdmM2M1MzMiLCJpZCI6MTI2MjUzLCJpYXQiOjE2NzczMTI2ODJ9.KO5KCez-xGcJBJfY8XYWAlUXHO4WWrZUm6tCZ1MfCWM'
+    const viewer = new Cesium.Viewer("cesiumContainer", {
+      imageryProvider: new Cesium.ArcGisMapServerImageryProvider({
+        url: 'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer'
+      })
+    })
+    viewer._cesiumWidget._creditContainer.style.display = "none"
+    viewer.terrainProvider = new Cesium.ArcGISTiledElevationTerrainProvider({
+      url: 'https://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer',
+    })
+
+    viewer.camera.setView({
+      destination: Cesium.Cartesian3.fromDegrees(82.9098, 29.2106, 35000.0), // 设置位置，北京的坐标
+      orientation: {
+        heading: Cesium.Math.toRadians(20.0),
+        pitch: Cesium.Math.toRadians(-40.0),
+        roll: 0
+      }
+    })
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>default-view</title>
+  <link rel='stylesheet' href='../assets/libs/cesium/Widgets/widgets.css'>
+  <style>
+    html,
+    body,
+    #cesiumContainer {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+  </style>
+
+</head>
+
+<body>
+  <div id="cesiumContainer"></div>
+  <script src='https://cesium.com/downloads/cesiumjs/releases/1.97/Build/Cesium/Cesium.js'></script>
+  <script>
+    Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI0NmY4OGRkZS03ZTljLTQ5MDMtYmUwZC0wNmM2ZjdmM2M1MzMiLCJpZCI6MTI2MjUzLCJpYXQiOjE2NzczMTI2ODJ9.KO5KCez-xGcJBJfY8XYWAlUXHO4WWrZUm6tCZ1MfCWM'
+    const viewer = new Cesium.Viewer("cesiumContainer", {
+      imageryProvider: new Cesium.ArcGisMapServerImageryProvider({
+        url: 'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer'
+      })
+    })
+    viewer._cesiumWidget._creditContainer.style.display = "none"
+    Cesium.Camera.DEFAULT_VIEW_RECTANGLE = Cesium.Rectangle.fromDegrees(
+      75.0, // 西经
+      0.0, // 南纬
+      140.0, // 东经
+      60.0 // 北纬
+    )
+
+    // viewer.homeButton.viewModel.command.beforeExecute.addEventListener(e => {
+    //   e.cancel = true
+    //   // 将视角修改为中国的上方
+    //   viewer.camera.flyTo({
+    //     destination: Cesium.Rectangle.fromDegrees(
+    //       75.0, // 西经
+    //       0.0, // 南纬
+    //       140.0, // 东经
+    //       60.0 // 北纬
+    //     )
+    //   })
+    // })
+  </script>
+</body>
+
+</html>

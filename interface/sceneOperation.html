@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  <title>sceneOperation</title>
+  <link rel='stylesheet' href='../assets/libs/cesium/Widgets/widgets.css'>
+  <style>
+    html,
+    body,
+    #cesiumContainer {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    .tips {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      font-size: 14px;
+      z-index: 999;
+      color: #ebebeb;
+      background-color: #1f1f1f;
+      border-radius: 2px;
+      padding: 4px;
+      user-select: none;
+    }
+
+    .lil-gui {
+      --width: 180px;
+      --name-width: 85%;
+    }
+
+    .lil-gui.autoPlace {
+      top: 50px;
+      left: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="cesiumContainer">
+    <div class="tips">
+      提示：点击显示或隐藏场景要素
+    </div>
+  </div>
+  <script src="../assets/libs/cesium/Cesium.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lil-gui@0.17"></script>
+  <script>
+    Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI0NmY4OGRkZS03ZTljLTQ5MDMtYmUwZC0wNmM2ZjdmM2M1MzMiLCJpZCI6MTI2MjUzLCJpYXQiOjE2NzczMTI2ODJ9.KO5KCez-xGcJBJfY8XYWAlUXHO4WWrZUm6tCZ1MfCWM'
+    const viewer = new Cesium.Viewer("cesiumContainer", {
+      imageryProvider: new Cesium.ArcGisMapServerImageryProvider({
+        url: 'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer'
+      }),
+      baseLayerPicker: false, // 是否显示图层选择控件
+    })
+    viewer.scene.debugShowFramesPerSecond = true 
+  </script>
+  <script>
+
+    // lil-gui
+    const gui = new lil.GUI();
+    const controls = {
+      debugShowFramesPerSecond: true,
+      skyBox: true,
+      skyAtmosphere: true,
+      globe: true,
+      sun: true,
+      moon: true,
+    }
+
+    gui.add(controls, 'debugShowFramesPerSecond').name('帧率').onChange((e) => {
+      viewer.scene.debugShowFramesPerSecond = e
+    })
+    gui.add(controls, 'skyBox').name('星空').onChange((e) => {
+      viewer.scene.skyBox.show = e
+    })
+    gui.add(controls, 'skyAtmosphere').name('大气层').onChange((e) => {
+      viewer.scene.skyAtmosphere.show = e
+    })
+    gui.add(controls, 'globe').name('地球').onChange((e) => {
+      viewer.scene.globe.show = e
+    })
+    gui.add(controls, 'sun').name('太阳').onChange((e) => {
+      viewer.scene.sun.show = e
+    })
+    gui.add(controls, 'moon').name('月亮').onChange((e) => {
+      viewer.scene.moon.show = e
+    })
+  </script>
+</body>
+
+</html>

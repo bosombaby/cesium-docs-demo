@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>CustomHeightmapTerrainProvider</title>
+  <link rel='stylesheet' href='../assets/libs/cesium/Widgets/widgets.css'>
+  <style>
+    html,
+    body,
+    #cesiumContainer {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+  </style>
+
+</head>
+
+<body>
+  <div id="cesiumContainer"></div>
+  <script src='https://cesium.com/downloads/cesiumjs/releases/1.97/Build/Cesium/Cesium.js'></script>
+  <script>
+    Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI0NmY4OGRkZS03ZTljLTQ5MDMtYmUwZC0wNmM2ZjdmM2M1MzMiLCJpZCI6MTI2MjUzLCJpYXQiOjE2NzczMTI2ODJ9.KO5KCez-xGcJBJfY8XYWAlUXHO4WWrZUm6tCZ1MfCWM'
+    const viewer = new Cesium.Viewer("cesiumContainer", {
+      imageryProvider: new Cesium.ArcGisMapServerImageryProvider({
+        url: 'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer'
+      })
+    })
+    viewer._cesiumWidget._creditContainer.style.display = "none"
+    let width = 64
+    let height = 64
+    viewer.terrainProvider = new Cesium.CustomHeightmapTerrainProvider({
+      callback: (x, y, level) => {
+        let buffer = new Float32Array(width * height)
+        for (let yy = 0; yy < height; yy++) {
+          for (let xx = 0; xx < width; xx++) {
+            let v = (y + yy / (height - 1)) / Math.pow(2, level)
+            let heightValue = 8000 * (Math.sin(4000 * v) * 0.5 + 0.5)
+            let index = yy * width + xx
+            buffer[index] = heightValue
+          }
+        }
+        return buffer
+      },
+      width: width,
+      height: height,
+    })
+    viewer.camera.setView({
+      destination: Cesium.Cartesian3.fromDegrees(82.9098, 29.2106, 35000.0), // 设置位置，北京的坐标
+      orientation: {
+        heading: Cesium.Math.toRadians(20.0),
+        pitch: Cesium.Math.toRadians(-40.0),
+        roll: 0
+      }
+    })
+  </script>
+</body>
+
+</html>

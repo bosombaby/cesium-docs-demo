@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  <title>lookAt</title>
+  <link rel="stylesheet"
+    href="https://lf26-cdn-tos.bytecdntp.com/cdn/expire-1-M/element-ui/2.15.7/theme-chalk/index.min.css">
+  <link rel='stylesheet' href='../assets/libs/cesium/Widgets/widgets.css'>
+  <style>
+    html,
+    body,
+    #cesiumContainer {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    #app {
+      padding: 20px;
+      width: 225px;
+      position: absolute;
+      left: 10px;
+      top: 10px;
+      z-index: 999;
+      color: #fff;
+      background-color: rgba(40, 44, 50, 0.9);
+      border-radius: 10px;
+    }
+
+    .cancel-button {
+      margin-left: 0px !important;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="cesiumContainer">
+    <div id="app">
+      <div>提示：点击下方按钮将相机视角定位到目标位置，定位后相机视角将被锁定，可通过“解除视角锁定”按钮解除锁定</div><br>
+      <el-button type="primary" @click="lookAtCartesian3" size="small">北京天安门</el-button>
+      <el-button type="primary" @click="lookAtHeadingPitchRange" size="small">武汉黄鹤楼</el-button>
+      <el-button type="warning" @click="unlock" size="small" class="cancel-button">解除视角锁定</el-button>
+    </div>
+  </div>
+  <script src="https://lib.baomitu.com/vue/2.6.14/vue.min.js"></script>
+  <script src="https://lib.baomitu.com/element-ui/2.15.7/index.min.js"></script>
+  <script src="../assets/libs/cesium/Cesium.js"></script>
+  <script>
+    Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI0NmY4OGRkZS03ZTljLTQ5MDMtYmUwZC0wNmM2ZjdmM2M1MzMiLCJpZCI6MTI2MjUzLCJpYXQiOjE2NzczMTI2ODJ9.KO5KCez-xGcJBJfY8XYWAlUXHO4WWrZUm6tCZ1MfCWM'
+    const viewer = new Cesium.Viewer("cesiumContainer", {
+      imageryProvider: new Cesium.ArcGisMapServerImageryProvider({
+        url: 'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer'
+      })
+    })
+    viewer._cesiumWidget._creditContainer.style.display = "none"
+  </script>
+  <script>
+    new Vue({
+      el: '#app',
+      methods: {
+        lookAtCartesian3 () {
+          const center = Cesium.Cartesian3.fromDegrees(116.391311, 39.90616, 1500)
+          viewer.camera.lookAt(center, new Cesium.Cartesian3(0.0, -4790.0, 3900.0))
+        },
+        lookAtHeadingPitchRange () {
+          const center = Cesium.Cartesian3.fromDegrees(114.296870, 30.546479, 100)
+          const heading = Cesium.Math.toRadians(50.0)
+          const pitch = Cesium.Math.toRadians(-70.0)
+          const range = 180.0
+          viewer.camera.lookAt(center, new Cesium.HeadingPitchRange(heading, pitch, range))
+        },
+        unlock () {
+          // 解除相机视角锁定
+          viewer.camera.lookAtTransform(Cesium.Matrix4.IDENTITY)
+        }
+      },
+    })
+  </script>
+</body>
+
+</html>
